@@ -9,13 +9,9 @@
 const char *ssid = "River";
 
 /*****Initialization*****/
-ESP8266WebServer server(8080);
+ESP8266WebServer server(80);
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(1, PIN, NEO_GRB + NEO_KHZ800);
 
-
-/* Go to http://192.168.4.1 in a web browser
- * connected to this access point to see it.
- */
 void handleRoot() {
   server.send(200, "text/html", "\
   <html>\
@@ -63,12 +59,16 @@ void setup() {
   //WiFiManager
   WiFiManager wifiManager;
   //reset saved settings -- Flush flash
-  //wifiManager.resetSettings();
+  wifiManager.resetSettings();
   //fetches ssid and pass from eeprom and tries to connect
   //if it does not connect it starts an access point with the specified name
   //and goes into a blocking loop awaiting configuration
   wifiManager.autoConnect(ssid);
-    
+  Serial.println("local ip");
+  Serial.println(WiFi.localIP());
+  server.on("/", handleRoot);
+  server.begin();
+  
   // This initializes the NeoPixel library.
   pixels.begin(); 
 }
