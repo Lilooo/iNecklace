@@ -17,9 +17,13 @@ void handleRoot() {
   <html>\
     <head>\
       <title>Collier de Paulette</title>\
-      <script src='https://code.jquery.com/jquery-1.10.2.js'></script>\
+      <link rel='stylesheet' href='http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css'>\
+      <script src='http://code.jquery.com/jquery-1.11.3.min.js'></script>\
+      <script src='http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js'></script>\
       <script type='text/javascript' charset='utf-8'>\
-        $('p').on('click',function(){$(this).hide();});\
+      $(document).ready(function(){\
+        $('p').on('swipe',function(){$(this).hide();});\
+      });\
       </script>\
     </head>\
       <h1>Paulette's Necklace</h1>\
@@ -59,7 +63,7 @@ void setup() {
   //WiFiManager
   WiFiManager wifiManager;
   //reset saved settings -- Flush flash
-  wifiManager.resetSettings();
+  //wifiManager.resetSettings();
   //fetches ssid and pass from eeprom and tries to connect
   //if it does not connect it starts an access point with the specified name
   //and goes into a blocking loop awaiting configuration
