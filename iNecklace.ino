@@ -1,3 +1,4 @@
+/****Includes****/
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
 #include <DNSServer.h>            //Local DNS Server used for redirecting all requests to the configuration portal
@@ -5,6 +6,7 @@
 #include <WiFiManager.h>          //https://github.com/tzapu/WiFiManager WiFi Configuration Magic
 #include <Adafruit_NeoPixel.h>
 
+/****Config****/
 #define PIN   D2
 const char *ssid = "River";
 
@@ -12,6 +14,7 @@ const char *ssid = "River";
 ESP8266WebServer server(80);
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(1, PIN, NEO_GRB + NEO_KHZ800);
 
+/*****WebPage*****/
 void handleRoot() {
   server.send(200, "text/html", "\
   <html>\
@@ -31,6 +34,44 @@ void handleRoot() {
   </html>");
 }
 
+/****Setups****/
+void setupWifi() {
+  //WiFiManager
+  WiFiManager wifiManager;
+  //reset saved settings -- Flush flash
+  //wifiManager.resetSettings();
+  //fetches ssid and pass from eeprom and tries to connect
+  //if it does not connect it starts an access point with the specified name
+  //and goes into a blocking loop awaiting configuration
+  wifiManager.autoConnect(ssid);
+  Serial.println("local ip");
+  Serial.println(WiFi.localIP());
+}
+
+void setupServer() {
+  server.on("/", handleRoot);
+  server.begin();
+  Serial.println("HTTP server started");
+}
+
+void setup() {
+  delay(1000);
+  Serial.begin(115200);
+  
+  setupWifi();
+  setupServer();
+  
+  // This initializes the NeoPixel library.
+  pixels.begin(); 
+}
+
+/****Loop****/
+void loop() {
+  server.handleClient();
+  //rainbow(20);
+}
+
+/****Neopixels****/
 void rainbow(uint8_t wait) {
   uint16_t i, j;
 
@@ -54,30 +95,4 @@ uint32_t Wheel(byte WheelPos) {
   }
   WheelPos -= 170;
   return pixels.Color(WheelPos * 3, 255 - WheelPos * 3, 0);
-}
-
-void setup() {
-  delay(1000);
-  Serial.begin(115200);
-  
-  //WiFiManager
-  WiFiManager wifiManager;
-  //reset saved settings -- Flush flash
-  //wifiManager.resetSettings();
-  //fetches ssid and pass from eeprom and tries to connect
-  //if it does not connect it starts an access point with the specified name
-  //and goes into a blocking loop awaiting configuration
-  wifiManager.autoConnect(ssid);
-  Serial.println("local ip");
-  Serial.println(WiFi.localIP());
-  server.on("/", handleRoot);
-  server.begin();
-  
-  // This initializes the NeoPixel library.
-  pixels.begin(); 
-}
-
-void loop() {
-  server.handleClient();
-  //rainbow(20);
 }
