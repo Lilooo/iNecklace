@@ -39,7 +39,24 @@ void handleRoot() {
   </html>");
 }
 
+void handleNotFound() {
+  String message = "File Not Found\n\n";
+  message += getRequest();
+  server.send(404, "text/plain", message);
+}
+
+/****Manage LEDs****/
+void handleLED() {
+
+
+}
+
 /****Setups****/
+void setupSerial() {
+  delay(1000);
+  Serial.begin(115200);
+}
+
 void setupWifi() {
   //WiFiManager
   WiFiManager wifiManager;
@@ -55,19 +72,23 @@ void setupWifi() {
 
 void setupServer() {
   server.on("/", handleRoot);
+  server.onNotFound(handleNotFound);
   server.begin();
   Serial.println("HTTP server started");
 }
 
-void setup() {
-  delay(1000);
-  Serial.begin(115200);
-  
-  setupWifi();
-  setupServer();
-  
+void setupPixels() {
   // This initializes the NeoPixel library.
   pixels.begin(); 
+}
+
+void setup() {
+  
+  setupSerial();
+  setupWifi();
+  setupServer();
+  setupPixels();
+  
 }
 
 /****Loop****/
