@@ -19,18 +19,23 @@ void handleRoot() {
   server.send(200, "text/html", "\
   <html>\
     <head>\
-      <title>Collier de Paulette</title>\
+      <title>Paulette' Necklace</title>\
       <link rel='stylesheet' href='http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css'>\
       <script src='http://code.jquery.com/jquery-1.11.3.min.js'></script>\
       <script src='http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js'></script>\
       <script type='text/javascript' charset='utf-8'>\
       $(document).ready(function(){\
-        $('p').on('swipe',function(){$(this).hide();});\
+        $('p').on('swipe',function(){$(this).toggleClass('on');});\
       });\
       </script>\
     </head>\
-      <h1>Paulette's Necklace</h1>\
-        <p>Swipe Me !</p>\
+        <p class='led'>LED 1</p>\
+        <p class='led'>LED 2</p>\
+        <p class='led'>LED 3</p>\
+        <p class='led'>LED 4</p>\
+        <p class='led'>LED 5</p>\
+        <p class='led'>LED 6</p>\
+        <p class='led'>LED 7</p>\
   </html>");
 }
 
