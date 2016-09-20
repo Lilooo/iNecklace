@@ -7,7 +7,7 @@
 #include <Adafruit_NeoPixel.h>    //https://github.com/adafruit/Adafruit_NeoPixel
 
 /****Config****/
-#define PIN   D2
+#define PIN   D1
 const char *ssid = "River";
 
 /*****Initialization*****/
