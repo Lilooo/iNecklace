@@ -6,6 +6,8 @@
 #include <WiFiManager.h>          //https://github.com/tzapu/WiFiManager WiFi Configuration Magic
 #include <Adafruit_NeoPixel.h>    //https://github.com/adafruit/Adafruit_NeoPixel
 
+bool leds_states[7] = {0};
+
 /****Config****/
 #define PIN   D1
 const char *ssid = "River";
@@ -30,28 +32,38 @@ void handleRoot() {
           var domElement = $(this).get(0);\
           $( 'span:first' ).text( 'swipe on - ' + domElement.className + ' ' + domElement.id);\
           $.get( '/settings' , {id:domElement.id, state:domElement.className});\
-          });\
+        });\
       });\
       </script>\
     </head>\
         <span></span>\
-        <p id='led1'>LED 1</p>\
-        <p id='led2'>LED 2</p>\
-        <p id='led3'>LED 3</p>\
-        <p id='led4'>LED 4</p>\
-        <p id='led5'>LED 5</p>\
-        <p id='led6'>LED 6</p>\
-        <p id='led7'>LED 7</p>\
+        <p id='0'>LED 0</p>\
+        <p id='1'>LED 1</p>\
+        <p id='2'>LED 2</p>\
+        <p id='3'>LED 3</p>\
+        <p id='4'>LED 4</p>\
+        <p id='5'>LED 5</p>\
+        <p id='6'>LED 6</p>\
   </html>");
 }
 
 /****Manage LEDs****/
 void handleLEDs() {
-  if (server.hasArg("id") && server.hasArg("state")) {
-    Serial.println("id&state");
+  if ( server.hasArg("id") && server.hasArg("state") ) {
+    int id = server.arg("id").toInt();
+
+    // check if state changed:
+    if (leds_states[id] != server.arg("state").equals("on")) {
+      leds_states[id] = server.arg("state").equals("on");
+
+      Serial.print("id: ");
+      Serial.print( id );
+      Serial.print(" - state: ");
+      Serial.println( leds_states[id] );
+    }
   }
   else {
-    Serial.println("nothing");
+    Serial.println("Bad URL.");
   }
 }
 
