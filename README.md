@@ -14,6 +14,10 @@ Adafruit NeoPixel:
 
     https://github.com/adafruit/Adafruit_NeoPixel
 
+Elapsed milliseconds:
+
+    https://github.com/pfeerick/elapsedMillis
+
 
 ## Usage
 

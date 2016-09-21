@@ -5,8 +5,10 @@
 #include <ESP8266WebServer.h>     //Local WebServer used to serve the configuration portal
 #include <WiFiManager.h>          //https://github.com/tzapu/WiFiManager WiFi Configuration Magic
 #include <Adafruit_NeoPixel.h>    //https://github.com/adafruit/Adafruit_NeoPixel
+#include <elapsedMillis.h>        //https://github.com/pfeerick/elapsedMillis
 
 bool leds_states[7] = {0};
+elapsedMillis elapsedTime;
 
 /****Config****/
 #define PIN   D1
@@ -14,7 +16,7 @@ const char *ssid = "River";
 
 /*****Initialization*****/
 ESP8266WebServer server(80);
-Adafruit_NeoPixel pixels = Adafruit_NeoPixel(1, PIN, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel pixels = Adafruit_NeoPixel(7, PIN, NEO_GRB + NEO_KHZ800);
 
 /*****WebPage*****/
 void handleRoot() {
@@ -110,4 +112,42 @@ void setup() {
 /****Loop****/
 void loop() {
   server.handleClient();
+  nonBlockingRainbow(5);
 }
+
+/****Neopixels****/
+void nonBlockingRainbow(int waitMs) {
+
+  // non blocking delay:
+  if (elapsedTime < waitMs)
+    return;
+  elapsedTime = 0;
+
+  // "loop" on colors:
+  static int j = 0;
+  j = j < 256 ? j+1 : 0;
+
+  // "loop" on pixels:
+  for(int i=0; i<pixels.numPixels(); i++) {
+    if (leds_states[i]) // is pixel web-enabled?
+      pixels.setPixelColor(i, Wheel((i+j) & 255));
+    else
+      pixels.setPixelColor(i, 0); // off
+  }
+
+  pixels.show();
+}
+
+uint32_t Wheel(byte WheelPos) {
+  WheelPos = 255 - WheelPos;
+  if(WheelPos < 85) {
+    return pixels.Color(255 - WheelPos * 3, 0, WheelPos * 3);
+  }
+  if(WheelPos < 170) {
+    WheelPos -= 85;
+    return pixels.Color(0, WheelPos * 3, 255 - WheelPos * 3);
+  }
+  WheelPos -= 170;
+  return pixels.Color(WheelPos * 3, 255 - WheelPos * 3, 0);
+}
+
