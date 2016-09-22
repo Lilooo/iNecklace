@@ -115,7 +115,7 @@ void setup() {
 /****Loop****/
 void loop() {
   server.handleClient();
-  nonBlockingRainbow(5);
+  nonBlockingRainbow(20);
 }
 
 /****Neopixels****/
@@ -134,7 +134,7 @@ void nonBlockingRainbow(int waitMs) {
   // "loop" on pixels:
   for(int i=0; i<pixels.numPixels(); i++) {
     if (leds_states[i]) // is pixel web-enabled?
-      pixels.setPixelColor(i, Wheel((i+j) & 255));
+      pixels.setPixelColor(i, Wheel(((i * 256 / pixels.numPixels()) + j) & 255));
     else
       pixels.setPixelColor(i, 0); // off
   }
