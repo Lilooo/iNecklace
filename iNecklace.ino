@@ -103,6 +103,9 @@ void setupPixels() {
 }
 
 void setup() {
+  pinMode(D4, OUTPUT);
+  digitalWrite(D4, HIGH);
+
   setupSerial();
   setupWifi();
   setupServer();
@@ -122,6 +125,7 @@ void nonBlockingRainbow(int waitMs) {
   if (elapsedTime < waitMs)
     return;
   elapsedTime = 0;
+  digitalWrite(D4, !digitalRead(D4)); // debug blink
 
   // "loop" on colors:
   static int j = 0;
