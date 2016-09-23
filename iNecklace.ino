@@ -21,32 +21,50 @@ Adafruit_NeoPixel pixels = Adafruit_NeoPixel(7, PIN, NEO_GRB + NEO_KHZ800);
 /*****WebPage*****/
 void handleRoot() {
   server.send(200, "text/html", "\
-  <html>\
-    <head>\
-      <title>Paulette' Necklace</title>\
-      <link rel='stylesheet' href='http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css'>\
-      <script src='http://code.jquery.com/jquery-1.11.3.min.js'></script>\
-      <script src='http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js'></script>\
-      <script type='text/javascript' charset='utf-8'>\
+<!doctype html>\
+<html>\
+<head>\
+  <title>Paulette' Necklace</title>\
+  <link rel='stylesheet' href='http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css'>\
+  <script src='http://code.jquery.com/jquery-1.11.3.min.js'></script>\
+  <script src='http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js'></script>\
+  <style>\
+    .LED\
+    {\
+        width:100%;\
+        border: 2px solid black;\
+        border:2px solid black;\
+    }\
+  </style>\
+</head>\
+<body>\
+    <span></span>\
+    <div id='0' class='LED'>LED 0</div>\
+    <div id='1' class='LED'>LED 1</div>\
+    <div id='2' class='LED'>LED 2</div>\
+    <div id='3' class='LED'>LED 3</div>\
+    <div id='4' class='LED'>LED 4</div>\
+    <div id='5' class='LED'>LED 5</div>\
+    <div id='6' class='LED'>LED 6</div>\
+    <script type='text/javascript' charset='utf-8'>\
       $(document).ready(function(){\
-        $('p').on('swipe',function(){\
+        var w = $(window).width();\
+        var h = $(window).height();\
+        var ledButton = $('div.LED');\
+        ledButton.each(function( index ) {\
+          $( this ).css('height',h/ledButton.length);\
+        });\
+        ledButton.on('swipe',function(){\
           $(this).toggleClass('on');\
           var domElement = $(this).get(0);\
           $( 'span:first' ).text( 'swipe on - ' + domElement.className + ' ' + domElement.id);\
           $.get( '/settings' , {id:domElement.id, state:domElement.className});\
         });\
       });\
-      </script>\
-    </head>\
-        <span></span>\
-        <p id='0'>LED 0</p>\
-        <p id='1'>LED 1</p>\
-        <p id='2'>LED 2</p>\
-        <p id='3'>LED 3</p>\
-        <p id='4'>LED 4</p>\
-        <p id='5'>LED 5</p>\
-        <p id='6'>LED 6</p>\
-  </html>");
+    </script>\
+</body>\
+</html>\
+");
 }
 
 /****Manage LEDs****/
@@ -55,8 +73,8 @@ void handleLEDs() {
     int id = server.arg("id").toInt();
 
     // check if state changed:
-    if (leds_states[id] != server.arg("state").equals("on")) {
-      leds_states[id] = server.arg("state").equals("on");
+    if (leds_states[id] != server.arg("state").equals("LED on")) {
+      leds_states[id] = server.arg("state").equals("LED on");
 
       Serial.print("id: ");
       Serial.print( id );
