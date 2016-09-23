@@ -7,7 +7,7 @@
 #include <Adafruit_NeoPixel.h>    //https://github.com/adafruit/Adafruit_NeoPixel
 #include <elapsedMillis.h>        //https://github.com/pfeerick/elapsedMillis
 
-bool leds_states[7] = {0};
+bool leds_states[7] = {1,1,1,1,1,1,1};
 elapsedMillis elapsedTime;
 
 /****Config****/
@@ -39,13 +39,13 @@ void handleRoot() {
 </head>\
 <body>\
     <span></span>\
-    <div id='0' class='LED'>LED 0</div>\
-    <div id='1' class='LED'>LED 1</div>\
-    <div id='2' class='LED'>LED 2</div>\
-    <div id='3' class='LED'>LED 3</div>\
-    <div id='4' class='LED'>LED 4</div>\
-    <div id='5' class='LED'>LED 5</div>\
-    <div id='6' class='LED'>LED 6</div>\
+    <div id='0' class='LED on'>LED 0</div>\
+    <div id='1' class='LED on'>LED 1</div>\
+    <div id='2' class='LED on'>LED 2</div>\
+    <div id='3' class='LED on'>LED 3</div>\
+    <div id='4' class='LED on'>LED 4</div>\
+    <div id='5' class='LED on'>LED 5</div>\
+    <div id='6' class='LED on'>LED 6</div>\
     <script type='text/javascript' charset='utf-8'>\
       $(document).ready(function(){\
         var w = $(window).width();\
@@ -75,11 +75,6 @@ void handleLEDs() {
     // check if state changed:
     if (leds_states[id] != server.arg("state").equals("LED on")) {
       leds_states[id] = server.arg("state").equals("LED on");
-
-      Serial.print("id: ");
-      Serial.print( id );
-      Serial.print(" - state: ");
-      Serial.println( leds_states[id] );
     }
   }
   else {
