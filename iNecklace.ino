@@ -161,6 +161,15 @@ void nonBlockingRainbow(int waitMs) {
 }
 
 uint32_t Wheel(byte WheelPos) {
+  // color range:
+  const int violet = 210;
+  const int yellow = 30;
+
+  // convertion:
+  const int range = yellow + 255 - violet;
+  WheelPos = ( range * WheelPos / 255 + violet ) % 255;
+
+  // normal wheel:
   WheelPos = 255 - WheelPos;
   if(WheelPos < 85) {
     return pixels.Color(255 - WheelPos * 3, 0, WheelPos * 3);
