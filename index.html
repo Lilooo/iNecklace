@@ -1,43 +1,130 @@
 <!doctype html>
 <html>
 <head>
-  <title>Paulette' Necklace</title>
-  <link rel='stylesheet' href='http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css'>
-  <script src='http://code.jquery.com/jquery-1.11.3.min.js'></script>
-  <script src='http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js'></script>
-  <style>
-    .LED
-    {
-        width:100%;
-        border: 2px solid black;
-        border:2px solid black;
-    }
-  </style>
+    <title>Paulette' Necklace</title>
+
+    <link rel='stylesheet' href='http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css'>
+
+    <script src='http://code.jquery.com/jquery-1.11.3.min.js'></script>
+    <!--<script src='http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js'></script>-->
+
+    <style>
+        body {
+            margin: 0;
+        }
+
+        .LED {
+            width:100%;
+            margin: 0 auto;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        .LED:after {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 3px;
+            left: 6px;
+            right: 6px;
+            bottom: 3px;
+            background-color: #f0f0f0;
+            z-index: 5;
+        }
+
+        .LED:before {
+            content: "OFF";
+            display: inline-block;
+            position: absolute;
+            top: 13px;
+            left: 15px;
+            z-index: 10;
+            color: #cdcdcd;
+            font-size: 50px;
+        }
+
+        .LED:first-child:after {
+            top: 6px;
+        }
+
+        .LED:last-child:after {
+            bottom: 6px;
+        }
+
+        .LED.on:before {
+            content: "ON";
+            color: #111;
+        }
+
+        .LED.on:after {
+            background-color: #a0a0a0;
+            color: #fff;
+        }
+
+        span.output {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 25px;
+        }
+    </style>
 </head>
 <body>
-    <span></span>
-    <div id='0' class='LED'>LED 0</div>
-    <div id='1' class='LED'>LED 1</div>
-    <div id='2' class='LED'>LED 2</div>
-    <div id='3' class='LED'>LED 3</div>
-    <div id='4' class='LED'>LED 4</div>
-    <div id='5' class='LED'>LED 5</div>
-    <div id='6' class='LED'>LED 6</div>
+    <span class="output" style="display: none;"></span>
+    <div class="led-wrapper">
+        <div id='0' class='LED'></div>
+        <div id='1' class='LED'></div>
+        <div id='2' class='LED'></div>
+        <div id='3' class='LED'></div>
+        <div id='4' class='LED'></div>
+        <div id='5' class='LED'></div>
+        <div id='6' class='LED'></div>
+    </div>
+
     <script type='text/javascript' charset='utf-8'>
-      $(document).ready(function(){
-        var w = $(window).width();
-        var h = $(window).height();
+
+    $(document).ready(function(){
+        FastClick.attach(document.body);
+
+        $('body').on('touchmove', function(e) {
+            //disables rubberband effect on iOs devices and scrolling
+            e.preventDefault();
+        });
+
+        var w = getWidth();
+        var h = getHeight();
         var ledButton = $('div.LED');
+
         ledButton.each(function( index ) {
-          $( this ).css('height',h/ledButton.length);
+            $( this ).css({
+                'height': h/ledButton.length
+            });
         });
-        ledButton.on('swipe',function(){
-          $(this).toggleClass('on');
-          var domElement = $(this).get(0);
-          $( 'span:first' ).text( 'swipe on - ' + domElement.className + ' ' + domElement.id);
-          $.get( '/settings' , {id:domElement.id, state:domElement.className});
+
+        ledButton.on('click',function(){
+            $(this).toggleClass('on');
+            var domElement = $(this).get(0);
+            $( 'span:first' ).text( 'swipe on - ' + domElement.className + ' ' + domElement.id);
+            $.get( '/settings' , {id:domElement.id, state:domElement.className});
         });
-      });
+    });
+
+    function getWidth() {
+        if      (self.innerWidth)                                                   return self.innerWidth;
+        else if (document.documentElement && document.documentElement.clientHeight) return document.documentElement.clientWidth;
+        else if (document.body)                                                     return document.body.clientWidth;
+        return 0;
+    }
+
+    function getHeight() {
+        if      (self.innerHeight)                                                  return self.innerHeight;
+        else if (document.documentElement && document.documentElement.clientHeight) return document.documentElement.clientHeight;
+        else if (document.body)                                                     return document.body.clientHeight;
+        return 0;
+    }
+
     </script>
+    
+    <script src='fastclick.js'></script>
 </body>
 </html>
