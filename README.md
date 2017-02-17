@@ -1,4 +1,5 @@
 # iNecklace
+<img src="https://pbs.twimg.com/media/CtFGvy9XgAE-I7p.jpg:large"/>
 
 ## Dependencies
 
