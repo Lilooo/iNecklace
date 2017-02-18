@@ -1,4 +1,10 @@
 # iNecklace
+
+IoT & Art!?
+
+This repo contains the code for a knitted "IoT necklace" with its LEDs controlled by a web interface. <br>
+Made in http://Schmiede.ca - 2016.
+
 <img src="https://pbs.twimg.com/media/CtFGvy9XgAE-I7p.jpg:large"/>
 
 ## Dependencies
