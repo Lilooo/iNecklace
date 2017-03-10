@@ -144,6 +144,7 @@ void handleLEDs() {
   else {
     Serial.println("Bad URL.");
   }
+  server.send(200, "text/html", "");
 }
 
 /****Setups****/
